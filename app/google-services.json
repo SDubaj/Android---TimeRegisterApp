@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "830282104547",
+    "project_id": "timeregister-600a8",
+    "storage_bucket": "timeregister-600a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830282104547:android:aab9fb34f7195b2b93cfd6",
+        "android_client_info": {
+          "package_name": "com.example.time_register"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "830282104547-emsf1mv5so6o0ebftt5m6m3g3uhuridp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrEREG4QV-HnI9AsxNpq6GXNXNjzLFtiY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "830282104547-emsf1mv5so6o0ebftt5m6m3g3uhuridp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

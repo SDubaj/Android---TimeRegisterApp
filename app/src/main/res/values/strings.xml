@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Time_Register</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="register_text">Don\'t have an account ?</string>
+    <string name="login_text">Already have an account ?</string>
+    <string name="password">Password</string>
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="employee_name">Name</string>
+    <string name="employee_surname">Surname</string>
+    <string name="employee_hourly_rate">Hourly rate</string>
+    <string name="employee_pesel">PESEL number</string>
+    <string name="employee_save">Save data</string>
+    <string name="task_name">Name</string>
+    <string name="task_describe">Describe</string>
+    <string name="task_new_task">Task data</string>
+    <string name="task_save_task">Save task</string>
+    <string name="task_go_back">Go back</string>
+
+</resources>
