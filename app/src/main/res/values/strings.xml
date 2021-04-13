@@ -17,5 +17,18 @@
     <string name="task_new_task">Task data</string>
     <string name="task_save_task">Save task</string>
     <string name="task_go_back">Go back</string>
+    <string name="task_delete">Delete Task</string>
+    <string name="employee_delete">Delete Employee</string>
+    <string name="employee_info">Employee details</string>
 
+    <string-array name="taskStatuses">
+        <item>New</item>
+        <item>In progress</item>
+        <item>Finished</item>
+    </string-array>
+    <string-array name="taskStatusesEmployee">
+        <item>New</item>
+        <item>In progress</item>
+        <item>Finished</item>
+    </string-array>
 </resources>

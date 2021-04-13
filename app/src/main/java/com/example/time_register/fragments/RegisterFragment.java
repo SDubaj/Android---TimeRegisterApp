@@ -27,25 +27,25 @@ public class RegisterFragment extends BasicFragment implements View.OnClickListe
     private FirebaseAuth mAuth;
     private EditText editTextEmail , editTextPassword ;
 
-            @Override
-            public View onCreateView(
-                    LayoutInflater inflater, ViewGroup container,
-                    Bundle savedInstanceState
-            ) {
-                View v = inflater.inflate(R.layout.register_fragment, container, false);
+    @Override
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState
+    ) {
+        View v = inflater.inflate(R.layout.register_fragment, container, false);
 
-                Button loginUser =  v.findViewById(R.id.login_button);
-                Button registerUser = v.findViewById(R.id.register_button);
-                loginUser.setOnClickListener(this);
-                registerUser.setOnClickListener(this);
+        Button loginUser =  v.findViewById(R.id.login_button);
+        Button registerUser = v.findViewById(R.id.register_button);
+        loginUser.setOnClickListener(this);
+        registerUser.setOnClickListener(this);
 
-                editTextEmail = (EditText) v.findViewById(R.id.email_input);
-                editTextPassword = (EditText) v.findViewById(R.id.password_input_singup);
+        editTextEmail = (EditText) v.findViewById(R.id.email_input);
+        editTextPassword = (EditText) v.findViewById(R.id.password_input_singup);
 
-                mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
-                return v;
-            }
+        return v;
+    }
 
 
     @Override
@@ -89,11 +89,12 @@ public class RegisterFragment extends BasicFragment implements View.OnClickListe
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            User user = new User(email, email.contains("admin") ? UserRoles.ADMINISTRATOR : UserRoles.USER);
+                            User user = new User(email, email.contains("admin") ? UserRoles.ADMINISTRATOR : UserRoles.USER,true);
                             Toast.makeText(getActivity(),"User has been registered",Toast.LENGTH_LONG).show();
-                            Fragment addEmployee = new AddEmployeeFragment();
+                            Fragment addEmployee = new LoginFragment();
                             setFragment(R.id.account_fragment, addEmployee);
 
+                            boolean isNew = true;
                             FirebaseDatabase.getInstance().getReference("Users")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -104,10 +105,20 @@ public class RegisterFragment extends BasicFragment implements View.OnClickListe
                                     }
                                 }
                             });
+                            /*FirebaseDatabase.getInstance().getReference("Users")
+                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .setValue(isNew).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(!task.isSuccessful()){
+                                        Toast.makeText(getActivity(),"Failed",Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });*/
                         }else{
-                                Toast.makeText(getActivity(),"Failed",Toast.LENGTH_LONG).show();
-                            }
+                            Toast.makeText(getActivity(),"Failed",Toast.LENGTH_LONG).show();
                         }
+                    }
 
                 });
 

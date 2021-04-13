@@ -1,5 +1,6 @@
 package com.example.time_register.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +9,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.example.time_register.R;
+import com.example.time_register.activities.AdminActivity;
+import com.example.time_register.activities.EmployeeActivity;
 import com.example.time_register.data_providers.EmployeeDataProvider;
 import com.example.time_register.models.Employee;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class AddEmployeeFragment extends BasicFragment implements View.OnClickListener {
 
@@ -31,6 +44,7 @@ public class AddEmployeeFragment extends BasicFragment implements View.OnClickLi
         Button saveBtn = view.findViewById(R.id.employee_save_button);
         saveBtn.setOnClickListener(this);
 
+
         return view;
     }
 
@@ -38,18 +52,47 @@ public class AddEmployeeFragment extends BasicFragment implements View.OnClickLi
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.employee_save_button:
+//                startActivity(new Intent(getActivity(), EmployeeActivity.class));
+
+//                Toast.makeText(getActivity(),"Employee created",Toast.LENGTH_LONG).show();
                 addEmployee();
                 break;
         }
     }
 
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    String userid = user.getUid();
+    FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference databaseReference =    mFirebaseDatabase.getReference().child("Users").child(userid);
+
     private void addEmployee() {
         if(validateFields())
         {
+            /*databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    snapshot.getRef().child("isNew").setValue("false");
+                    Toast.makeText(getActivity(),"dziala !",Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });*/
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String userid = user.getUid();
+            /*FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+            DatabaseReference databaseReference =    mFirebaseDatabase.getReference().child("Users").child(userid);*/
+
+
+
             employee.Id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            if(employeeDataProvider.Add(employee))
+            if(employeeDataProvider.Add(employee) && employeeDataProvider.Update(userid))
             {
-                setFragment(R.id.account_fragment, new LoginFragment());
+
+                setFragment(R.id.employee_fragment, new EmployeeFragment());
+//                startActivity(new Intent(getActivity(), EmployeeActivity.class));
                 Toast.makeText(getActivity(),"Employee created",Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(getActivity(),"Failed",Toast.LENGTH_LONG).show();

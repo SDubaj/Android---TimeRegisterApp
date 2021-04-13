@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 
 import com.example.time_register.R;
 import com.example.time_register.data_providers.TaskDataProvider;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,7 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminTaskFragment extends BasicFragment implements View.OnClickListener {
+public class AdminCompletedTasks extends BasicFragment implements View.OnClickListener {
     private ListView mListView;
     private ArrayList<String> mTasks = new ArrayList<>();
     private ArrayList<String> listOfKey = new ArrayList<>();
@@ -36,15 +35,17 @@ public class AdminTaskFragment extends BasicFragment implements View.OnClickList
     private TableLayout tasksTable;
     private TaskDataProvider taskDataProvider = new TaskDataProvider();
     private FirebaseAuth mAuth;
+    private List<Object> listObject;
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userid = user.getUid();
+        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference =    mFirebaseDatabase.getReference().child("Users").child(userid);
         view = inflater.inflate(R.layout.admin_tasks_fragment, container, false);
-//        tasksTable = view.findViewById(R.id.tasks_table);
-        FloatingActionButton addBtn =  view.findViewById(R.id.admin_add_task_btn);
-        addBtn.setOnClickListener(this);
         title = view.findViewById(R.id.title2);
         mListView = view.findViewById(R.id.listview2);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -52,34 +53,33 @@ public class AdminTaskFragment extends BasicFragment implements View.OnClickList
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 TaskFragment taskFragment = new TaskFragment();
                 Bundle bundle = new Bundle();
-//                Toast.makeText(getActivity(), listOfKey.get(1).toString(), Toast.LENGTH_LONG).show();
                 bundle.putString("TaskId", listOfKey.get(i));
                 taskFragment.setArguments(bundle);
                 setFragment(R.id.admin_fragment, taskFragment);
             }
         });
+
         ArrayAdapter arrayAdapter = new ArrayAdapter<String>(this.getContext(), R.layout.list_item, mTasks);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String userid = user.getUid();
 
-        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference =    mFirebaseDatabase.getReference().child("Tasks");
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        DatabaseReference databaseTasks =    mFirebaseDatabase.getReference().child("Tasks");
+        databaseTasks.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot uniqueKeySnapshot : snapshot.getChildren()){
-                    if(!uniqueKeySnapshot.child("Status").toString().contains("DONE")) {
+                    if(uniqueKeySnapshot.child("Status").toString().contains("DONE"))
+                    {
+
                         String post = uniqueKeySnapshot.child("Name").getValue().toString() + " : "
                                 + uniqueKeySnapshot.child("Describe").getValue().toString();
 
-
+                        //push items to lists
                         listOfKey.add(uniqueKeySnapshot.getKey());
-
                         arrayAdapter.add(post);
                         mListView.setAdapter(arrayAdapter);
                     }
                 }
+
                 arrayAdapter.notifyDataSetChanged();
             }
             @Override
@@ -89,38 +89,8 @@ public class AdminTaskFragment extends BasicFragment implements View.OnClickList
 
 
 
-//        loadTasks();
 
 
-
-        /*ArrayList<String> mMeetings = new ArrayList<>();
-        ArrayAdapter arrayAdapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_list_item_1, mMeetings);
-        mListView.setAdapter(arrayAdapter);
-        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference =    mFirebaseDatabase.getReference().child("Tasks");
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                    mMeetings.add(childDataSnapshot.child("Name").getValue().toString());
-                    Toast.makeText(getActivity(), childDataSnapshot.child("Name").getValue().toString(), Toast.LENGTH_LONG).show();
-
-//                    Log.v(TAG,""+ childDataSnapshot.getKey()); //displays the key for the node
-//                    Log.v(TAG,""+ childDataSnapshot.child("Name").getValue());   //gives the value for given keyname
-                }
-            arrayAdapter.notifyDataSetChanged();
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
-/*
-        loadTasks();
-*/
         return view;
     }
 
@@ -131,12 +101,6 @@ public class AdminTaskFragment extends BasicFragment implements View.OnClickList
                 setFragment(R.id.admin_fragment, new AddTaskFragment());
                 break;
         }
-    }
-
-    private void loadTasks(){
-
-        taskDataProvider.GetTasks();
-
     }
 
 

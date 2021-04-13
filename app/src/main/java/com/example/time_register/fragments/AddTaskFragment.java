@@ -27,6 +27,7 @@ public class AddTaskFragment extends BasicFragment implements View.OnClickListen
 
         task = new Task();
         task.Status = TaskStatuses.NEW;
+        task.EmployeeId="";
 
         Button saveBtn = view.findViewById(R.id.task_save_button);
         saveBtn.setOnClickListener(this);

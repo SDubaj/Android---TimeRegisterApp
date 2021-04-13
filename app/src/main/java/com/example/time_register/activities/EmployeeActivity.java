@@ -8,28 +8,27 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.example.time_register.R;
-import com.example.time_register.fragments.AdminCompletedTasks;
-import com.example.time_register.fragments.AdminTaskFragment;
-import com.example.time_register.fragments.EmployeeListFragment;
+import com.example.time_register.fragments.EmployeeCompletedTasks;
+import com.example.time_register.fragments.EmployeeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class AdminActivity extends BasicActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class EmployeeActivity extends BasicActivity implements NavigationView.OnNavigationItemSelectedListener{
     private FirebaseAuth mAuth;
     private TextView title;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.admin_activity);
-        BottomNavigationView navView = findViewById(R.id.admin_bottom_nav);
+        setContentView(R.layout.employee_activity);
+        BottomNavigationView navView = findViewById(R.id.employee_bottom_nav);
         navView.setOnNavigationItemSelectedListener(this::onNavigationItemSelected);
         getSupportActionBar().hide();
         title = findViewById(R.id.title2);
-        title.setText("Tasks");
+        title.setText("Employee Tasks");
         mAuth = FirebaseAuth.getInstance();
 
-        setFragment(R.id.admin_fragment, new AdminTaskFragment());
+        setFragment(R.id.employee_fragment, new EmployeeFragment());
     }
 
 
@@ -37,22 +36,19 @@ public class AdminActivity extends BasicActivity implements NavigationView.OnNav
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.navigation_tasks:
-                title.setText("Tasks");
-                setFragment(R.id.admin_fragment, new AdminTaskFragment());
+                title.setText("My tasks");
+                setFragment(R.id.employee_fragment, new EmployeeFragment());
                 break;
-            case R.id.navigation_employees:
-                title.setText("Employees");
-                setFragment(R.id.admin_fragment, new EmployeeListFragment());
-                break;
-            case R.id.navigation_completed_tasks:
-                title.setText("Completed Tasks");
-                setFragment(R.id.admin_fragment, new AdminCompletedTasks());
+            case R.id.navigation_completed:
+                title.setText("Completed tasks");
+                setFragment(R.id.employee_fragment, new EmployeeCompletedTasks());
+                // process action
                 break;
 
             case R.id.navigation_sign_out:
                 title.setText("Please wait...");
                 mAuth.signOut();
-                startActivity( new Intent(AdminActivity.this, AccountActivity.class));
+                startActivity( new Intent(EmployeeActivity.this, AccountActivity.class));
                 break;
             default:
                 return false;

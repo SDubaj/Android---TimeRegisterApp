@@ -2,18 +2,18 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/employee_tasks_fragment"
+    android:id="@+id/employee_list_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/Transparent"
-    tools:context=".fragments.LoginFragment">
+    tools:context=".fragments.EmployeeListFragment">
 
     <!--<TableLayout
         android:id="@+id/tasks_table"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />-->
     <ListView
-        android:id="@+id/listview2"
+        android:id="@+id/employeesList"
         style="@style/Widget.AppCompat.Light.ListView.DropDown"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,17 +24,6 @@
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
         android:padding="10dip"></ListView>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/admin_add_task_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="#FF9800" />
 
 
 </FrameLayout>

@@ -5,15 +5,11 @@
         android:id="@+id/navigation_tasks"
         android:icon="@drawable/icon_tasks"
         android:title="Tasks"/>
-    <item
-        android:id="@+id/navigation_completed_tasks"
-        android:icon="@drawable/completed_tasks"
-        android:title="Completed"/>
 
     <item
-        android:id="@+id/navigation_employees"
-        android:icon="@drawable/user_icon"
-        android:title="Employees"/>
+        android:id="@+id/navigation_completed"
+        android:icon="@drawable/completed_tasks"
+        android:title="Completed" />
 
     <item
         android:id="@+id/navigation_sign_out"

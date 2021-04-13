@@ -16,17 +16,22 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.time_register.R;
 import com.example.time_register.activities.AdminActivity;
+import com.example.time_register.activities.EmployeeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginFragment extends BasicFragment implements View.OnClickListener {
 
     private FirebaseAuth mAuth;
-
+    private DatabaseReference DataRef;
     private EditText editTextEmail , editTextPassword ;
-    
+
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -87,8 +92,14 @@ public class LoginFragment extends BasicFragment implements View.OnClickListener
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    startActivity(new Intent(getActivity(), AdminActivity.class));
-                    Toast.makeText(getActivity(),"Logged in",Toast.LENGTH_LONG).show();
+                    //check role
+                    String uid = mAuth.getCurrentUser().getUid();
+                    DataRef = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+                    checkUserAccessLevel(uid);
+
+
+                    /*startActivity(new Intent(getActivity(), AdminActivity.class));
+                    Toast.makeText(getActivity(),"Logged in",Toast.LENGTH_LONG).show();*/
                 }else{
                     Toast.makeText(getActivity(),"Failed to log in",Toast.LENGTH_LONG).show();
                 }
@@ -97,5 +108,26 @@ public class LoginFragment extends BasicFragment implements View.OnClickListener
 
 
 
+
+
+    }
+
+    private void checkUserAccessLevel(String uid) {
+        DataRef = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+        DataRef.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                String userType = dataSnapshot.child("role").getValue().toString();
+                if (userType.equals("ADMINISTRATOR")) {
+                    startActivity(new Intent(getActivity(), AdminActivity.class));
+//                    Intent myIntent = new Intent(LoginFragment.this.getActivity(), Admin.class);
+//                    startActivity(myIntent);
+//                    Toast.makeText(getActivity(), "admin", Toast.LENGTH_LONG).show();
+                } else {
+                    startActivity(new Intent(getActivity(), EmployeeActivity.class));
+                    Toast.makeText(getActivity(), "user", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 }
